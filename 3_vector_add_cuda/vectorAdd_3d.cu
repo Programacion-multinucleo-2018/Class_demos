@@ -14,7 +14,7 @@ static inline void _safe_cuda_call(cudaError err, const char* msg, const char* f
 	}
 }
 
-#define SAFE_CALL(call,msg) _safe_cuda_call((call),(msg),__FILE__,__LINE__)
+#define SAFE_CALL(call,msg) _safe_cuda_call(call,msg,__FILE__,__LINE__)
 
 // inline double seconds()
 // {
@@ -43,7 +43,7 @@ int main( int argc, char* argv[] )
     SAFE_CALL(cudaEventCreate(&stop), "Error creating stop event");
 
     // Size of vectors
-    int n = 1<<20;
+    int n = 1<<23;
  
     // Host input vectors
     float *h_a;
@@ -84,16 +84,16 @@ int main( int argc, char* argv[] )
     int blockSize, gridSize;
  
     // Number of threads in each thread block
-    blockSize = 32;
+    blockSize = 1024;
  
     // Number of thread blocks in grid
     gridSize = (int)ceil((float)n/blockSize);
 
     printf("Gridsize: %d Blocksize: %d\n", gridSize, blockSize);
  
+    auto start_cpu =  chrono::high_resolution_clock::now();
     SAFE_CALL(cudaEventRecord(start, 0), "Error recording event");
 
-    auto start_cpu =  chrono::high_resolution_clock::now();
     // Execute the kernel
     vecAdd<<<gridSize, blockSize>>>(d_a, d_b, d_c, n);
  

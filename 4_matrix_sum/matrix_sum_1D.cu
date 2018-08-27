@@ -1,21 +1,10 @@
-#include <cuda_runtime.h>
+#include "common.h"
 #include <cstdio>
 #include <cstdlib>
 #include <math.h>
 #include <chrono>
 
 using namespace std;
-
-static inline void _safe_cuda_call(cudaError err, const char* msg, const char* file_name, const int line_number)
-{
-	if(err!=cudaSuccess)
-	{
-		fprintf(stderr,"%s\n\nFile: %s\n\nLine Number: %d\n\nReason: %s\n",msg,file_name,line_number,cudaGetErrorString(err));
-		exit(EXIT_FAILURE);
-	}
-}
-
-#define SAFE_CALL(call,msg) _safe_cuda_call(call,msg,__FILE__,__LINE__)
 
 void initialData(float *ip, const int size)
 {
@@ -85,8 +74,6 @@ __global__ void sumMatrixOnGPU1D(float *MatA, float *MatB, float *MatC, int nx,
             int idx = iy * nx + ix;
             MatC[idx] = MatA[idx] + MatB[idx];
         }
-
-
 }
 
 int main(int argc, char **argv)
@@ -142,7 +129,7 @@ int main(int argc, char **argv)
     SAFE_CALL(cudaMemcpy(d_MatB, h_B, nBytes, cudaMemcpyHostToDevice), "Error copying d_MatB");
 
     // invoke kernel at host side
-    int dimx = 32;
+    int dimx = 256;
     dim3 block(dimx, 1);
     dim3 grid((nx + block.x - 1) / block.x, 1);
 

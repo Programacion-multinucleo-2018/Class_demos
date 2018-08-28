@@ -1,7 +1,7 @@
 # Class demos
 Code demos for the August 2018 Multi-core programming course.
 
-# Configuración para editar archivos usando Sublime
+# Configuración para editar archivos usando Sublime (gracias Omar Sanseviero)
 
 ## Configurando multihop SSH
 

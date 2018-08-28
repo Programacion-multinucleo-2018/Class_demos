@@ -1,7 +1,7 @@
 # Class demos
 Code demos for the August 2018 Multi-core programming course.
 
-# Configuración para editar archivos usando Sublime (gracias Omar Sanseviero)
+# Configuración para editar archivos usando Sublime
 
 ## Configurando multihop SSH
 
@@ -25,3 +25,5 @@ Ahora al usar `ssh <nombre que quieras>` hará los dos saltos directamente.
 
 ## Modificar archivos
 Para modificar cualquier archivo, ya habiendo establecido la conexión ssh, utiliza `rmate <archivo>` para modificarlo directamente en tu computadora.
+
+Gracias Omar Sanseviero por el dato.

@@ -22,7 +22,7 @@ class vector3d
             z = z_;
         }
 
-        inline vector3d& operator +=(const vector3d& rhs)
+        __host__ __device__ inline vector3d& operator +=(const vector3d& rhs)
         {
             x += rhs.x;
             y += rhs.y;
@@ -30,13 +30,13 @@ class vector3d
             return *this;
         }
 
-        inline vector3d& operator +(const vector3d& rhs)
+        __host__ __device__ inline vector3d& operator +(const vector3d& rhs)
         {
             *this += rhs;
             return *this;
         }
 
-        inline vector3d& operator /=(const T& rhs)
+        __host__ __device__ inline vector3d& operator /=(const T& rhs)
         {
             x /= rhs;
             y /= rhs;
@@ -44,7 +44,7 @@ class vector3d
             return *this;
         }
 
-        inline vector3d& operator /(const T& rhs)
+        __host__ __device__ inline vector3d& operator /(const T& rhs)
         {
             *this /= rhs;
             return *this;

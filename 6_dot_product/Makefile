@@ -1,10 +1,10 @@
 CC = nvcc
-CFLAGS = 
+CFLAGS = -Wno-deprecated-gpu-targets
 INCLUDES = 
-LDFLAGS = -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_imgcodecs
-SOURCES = rgb_to_grayscale.cu
-OUTF = rgb_gray_cuda.exe
-OBJS = rgb_to_grayscale.o
+LDFLAGS = 
+SOURCES = dot_product_cuda.cu
+OUTF = dot_product_cuda.exe
+OBJS = dot_product_cuda.o
 
 $(OUTF): $(OBJS)
 	$(CC) $(CFLAGS) -o $(OUTF) $< $(LDFLAGS)

@@ -2,13 +2,13 @@
 #include <stdlib.h>
 #include <math.h>
 
-const int n = 1<<22;
-const int blockSize = 1024;
-const int gridSize = (int)ceil((float)n/blockSize);
+// const int n = 1<<20;
+// const int blockSize = 1024;
+// const int gridSize = (int)ceil((float)n/blockSize);
 
 __global__ void dotProduct(float *a, float *b, float *c, int n)
 {
-    __shared__ int cache[blockSize];
+    extern __shared__ float cache[];
 
     int tId = blockIdx.x*blockDim.x+threadIdx.x;
     int cacheIndex = threadIdx.x;
@@ -34,6 +34,10 @@ __global__ void dotProduct(float *a, float *b, float *c, int n)
  
 int main( int argc, char* argv[] )
 {
+    int n = 1<<20;
+    int blockSize = 1024;
+    int gridSize = (int)ceil((float)n/blockSize);
+
     // Size of vectors
     float n_f = (float)n;
  		
@@ -49,7 +53,7 @@ int main( int argc, char* argv[] )
     // Allocate memory for each vector on host
     h_a = new float[bytes](); //(float*)malloc(bytes);
     h_b = new float[bytes](); //(float*)malloc(bytes);
-    h_c = new float[blockSize * sizeof(float)];
+    h_c = new float[gridSize * sizeof(float)];
  
     // Allocate memory for each vector on GPU
     cudaMalloc(&d_a, bytes);
@@ -58,8 +62,8 @@ int main( int argc, char* argv[] )
  
     // Initialize vectors on host
     for(int i = 0; i <= n; i++ ) {
-        h_a[i] = 1;
-        h_b[i] = 1;
+        h_a[i] = 1.0f;
+        h_b[i] = 2.0f;
     }
  
     // Copy host vectors to device
@@ -67,7 +71,7 @@ int main( int argc, char* argv[] )
     cudaMemcpy( d_b, h_b, bytes, cudaMemcpyHostToDevice);
  
     // Execute the kernel
-    dotProduct<<<gridSize, blockSize>>>(d_a, d_b, d_c, n);
+    dotProduct<<<gridSize, blockSize, blockSize * sizeof(float)>>>(d_a, d_b, d_c, n);
 
     // Copy array back to host
     cudaMemcpy( h_c, d_c, gridSize * sizeof(float), cudaMemcpyDeviceToHost );
